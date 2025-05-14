@@ -11,74 +11,73 @@ import com.application.repository.DonorRepository;
 import com.application.repository.RequestingBloodRepository;
 
 @Service
-public class DonorService 
-{
+public class DonorService {
 	@Autowired
 	private DonorRepository donorRepository;
-	
+
 	@Autowired
 	private RequestingBloodRepository requestingBloodRepository;
-	
+
 	public Donor saveDonor(Donor donor)
 	{
 		return donorRepository.save(donor);
 	}
-	
+
 	public Donor saveUserAsDonor(Donor donor)
 	{
 		return donorRepository.save(donor);
 	}
-	
+
 	public Requesting saveBloodRequest(Requesting request)
 	{
 		return requestingBloodRepository.save(request);
 	}
-	
+
 	public Donor fetchDonorByBloodGroup(String bloodGroup)
 	{
 		return donorRepository.findByBloodGroup(bloodGroup);
 	}
-	
+
 	public void updateStatus(String email)
 	{
 		requestingBloodRepository.updateStatus(email);
 		System.out.println("Updated");
 	}
-	
+
 	public void rejectStatus(String email)
 	{
 		requestingBloodRepository.rejectStatus(email);
 	}
-	
+
 	public Donor fetchDonorByGender(String gender)
 	{
 		return donorRepository.findByGender(gender);
 	}
 
-	public List<Donor> getAllDonors() 
+	public List<Donor> getAllDonors()
 	{
 		return (List<Donor>)donorRepository.findAll();
 	}
-	
-	public List<Requesting> getRequestHistory() 
+
+	public List<Requesting> getRequestHistory()
 	{
 		return (List<Requesting>)requestingBloodRepository.findAll();
 	}
-	
-	public List<Requesting> getRequestHistoryByEmail(String email) 
+
+	public List<Requesting> getRequestHistoryByEmail(String email)
 	{
 		return (List<Requesting>)requestingBloodRepository.findByEmail(email);
 	}
-	
+
 	public List<Donor> getBloodDetails()
 	{
 		return (List<Donor>)donorRepository.findBloodDetails();
 	}
-	
+
 	public void checkforOldBloodSamples(List<Donor> donors)
 	{
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  
-        Date date = new Date();  
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
         String todayDate = formatter.format(date);
 		for(Donor donorlist:donors)
 		{
@@ -94,7 +93,7 @@ public class DonorService
 	static long findDifference(String donationDate,String todayDate)
     {
 		long daysDifference = 0;
-		try 
+		try
 		{
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	        Date date1 = sdf.parse(donationDate);

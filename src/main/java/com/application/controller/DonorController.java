@@ -23,28 +23,27 @@ import com.application.service.DonorService;
 import com.application.service.RegistrationService;
 
 @RestController
-public class DonorController
-{
+public class DonorController {
 	@Autowired
 	private DonorService donorService;
-	
+
 	@Autowired
 	private RegistrationService registrationService;
-	
+
 	@PostMapping("/addDonor")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public Donor addNewDonor(@RequestBody Donor donor) throws Exception
 	{
 		return donorService.saveDonor(donor);
 	}
-	
+
 	@PostMapping("/addAsDonor")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public Donor addUserAsDonor(@RequestBody Donor donor) throws Exception
 	{
 		return donorService.saveUserAsDonor(donor);
 	}
-	
+
 	@GetMapping("/acceptstatus/{email}")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<String>> updateStatus(@PathVariable String email) throws Exception
@@ -54,7 +53,7 @@ public class DonorController
 		al.add("accepted");
 		return new ResponseEntity<List<String>>(al,HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/rejectstatus/{email}")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<String>> rejectStatus(@PathVariable String email) throws Exception
@@ -64,7 +63,7 @@ public class DonorController
 		al.add("rejected");
 		return new ResponseEntity<List<String>>(al,HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/donorlist")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<Donor>> getDonors() throws Exception
@@ -72,7 +71,7 @@ public class DonorController
 		List<Donor> donors = donorService.getAllDonors();
 		return new ResponseEntity<List<Donor>>(donors, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/requestHistory")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<Requesting>> getRequestHistory() throws Exception
@@ -80,7 +79,7 @@ public class DonorController
 		List<Requesting> history = donorService.getRequestHistory();
 		return new ResponseEntity<List<Requesting>>(history, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/requestHistory/{email}")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<Requesting>> getRequestHistoryByEmail(@PathVariable String email) throws Exception
@@ -89,18 +88,18 @@ public class DonorController
 		List<Requesting> history = donorService.getRequestHistoryByEmail(email);
 		return new ResponseEntity<List<Requesting>>(history, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/bloodDetails")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<BloodDetails>> getBloodDetails() throws Exception
 	{
 		List<Donor> bloodDetails = donorService.getBloodDetails();
-		
+
         List<Donor> donors = donorService.getAllDonors();
 		donorService.checkforOldBloodSamples(donors);
-		
+
 		List<String> groups = new ArrayList<>();
-		List<Integer> units = new ArrayList<>(); 
+		List<Integer> units = new ArrayList<>();
 		Map<String, Integer> details = new LinkedHashMap<>();
 		for(Donor donor:bloodDetails)
 		{
@@ -117,7 +116,7 @@ public class DonorController
 			{
 				groups.add(donor.getBloodGroup());
 				units.add(donor.getUnits());
-			}		
+			}
 		}
 		List<BloodDetails> result = new ArrayList<>();
 		for(Map.Entry<String, Integer> m:details.entrySet())
@@ -127,7 +126,7 @@ public class DonorController
 		}
 		return new ResponseEntity<List<BloodDetails>>(result, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getTotalUsers")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<Integer>> getTotalUsers() throws Exception
@@ -137,20 +136,20 @@ public class DonorController
 		al.add(users.size());
 		return new ResponseEntity<List<Integer>>(al,HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getTotalDonors")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<Integer>> getTotalDonors() throws Exception
 	{
 		List<Donor> donors = donorService.getAllDonors();
-		
+
 		donorService.checkforOldBloodSamples(donors);
-		
+
 		List<Integer> al=new ArrayList<>();
 		al.add(donors.size());
 		return new ResponseEntity<List<Integer>>(al,HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getTotalBloodGroups")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<Integer>> getTotalBloodGroups() throws Exception
@@ -165,7 +164,7 @@ public class DonorController
 		al.add(set.size());
 		return new ResponseEntity<List<Integer>>(al,HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getTotalUnits")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<Integer>> getTotalUnits() throws Exception
@@ -180,7 +179,7 @@ public class DonorController
 		al.add(units);
 		return new ResponseEntity<List<Integer>>(al,HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getTotalRequests/{email}")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<Integer>> getTotalRequests(@PathVariable String email) throws Exception
@@ -190,7 +189,7 @@ public class DonorController
 		al.add(history.size());
 		return new ResponseEntity<List<Integer>>(al,HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getTotalDonationCount/{email}")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<Integer>> getTotalDonationCount(@PathVariable String email) throws Exception
@@ -206,7 +205,7 @@ public class DonorController
 		al.add(count);
 		return new ResponseEntity<List<Integer>>(al, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/userlist")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<User>> getUsers() throws Exception
@@ -214,7 +213,7 @@ public class DonorController
 		List<User> users = registrationService.getAllUsers();
 		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/profileDetails/{email}")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<List<User>> getProfileDetails(@PathVariable String email) throws Exception
@@ -222,7 +221,7 @@ public class DonorController
 		List<User> users = registrationService.fetchProfileByEmail(email);
 		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/requestblood")
 	@CrossOrigin(origins = "http://localhost:4200")
 	public Requesting addNewBloodRequest(@RequestBody Requesting request) throws Exception
